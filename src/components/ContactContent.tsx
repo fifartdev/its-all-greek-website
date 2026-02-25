@@ -2,14 +2,7 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import {
-  MapPin,
-  Phone,
-  Mail,
-  Clock,
-  Send,
-  CheckCircle,
-} from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Send, CheckCircle } from "lucide-react";
 import { InstagramIcon, TikTokIcon, TripAdvisorIcon } from "./SocialIcons";
 import clsx from "clsx";
 
@@ -28,7 +21,7 @@ export default function ContactContent() {
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
-    >
+    >,
   ) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
@@ -52,21 +45,21 @@ export default function ContactContent() {
     {
       icon: MapPin,
       label: "Location",
-      value: "Athens, Greece",
+      value: "27, Zinonos str., Chalandri - Athens, Greece",
       sub: "Operating across Athens & Attica",
     },
     {
       icon: Phone,
       label: "Phone",
-      value: "+30 210 123 4567",
-      href: "tel:+302101234567",
+      value: "+30 210 36 36 000",
+      href: "tel:+3021036360000",
       sub: "Mon–Sun · 08:00–20:00",
     },
     {
       icon: Mail,
       label: "Email",
-      value: "hello@itsallgreek2me.tours",
-      href: "mailto:hello@itsallgreek2me.tours",
+      value: "info@itsallgreek2me.tours",
+      href: "mailto:info@itsallgreek2me.tours",
       sub: "We reply within 1 hour",
     },
     {
@@ -121,9 +114,9 @@ export default function ContactContent() {
                 We&apos;re here to help
               </h2>
               <p className="text-[#7aabca] text-sm leading-relaxed">
-                Whether you&apos;re planning a tour, need an airport transfer, or
-                have a special request — our team is ready to craft the perfect
-                Athens experience for you.
+                Whether you&apos;re planning a tour, need an airport transfer,
+                or have a special request — our team is ready to craft the
+                perfect Athens experience for you.
               </p>
             </div>
 
@@ -143,7 +136,9 @@ export default function ContactContent() {
                       <p className="text-sm text-[#eaf4fb] font-medium">
                         {item.value}
                       </p>
-                      <p className="text-xs text-[#4a7896] mt-0.5">{item.sub}</p>
+                      <p className="text-xs text-[#4a7896] mt-0.5">
+                        {item.sub}
+                      </p>
                     </div>
                   </div>
                 );
@@ -165,9 +160,21 @@ export default function ContactContent() {
               </p>
               <div className="flex gap-3 flex-wrap">
                 {[
-                  { href: "https://www.instagram.com/itsallgreektome_tours/", label: "Instagram", icon: <InstagramIcon size={14} /> },
-                  { href: "https://www.tripadvisor.com.gr/Attraction_Review-g189400-d32977828-Reviews-It_s_all_Greek_To_Me_Tours_by_Xike_Travel-Athens_Attica.html", label: "TripAdvisor", icon: <TripAdvisorIcon size={14} /> },
-                  { href: "https://www.tiktok.com/@its.allgreek2me", label: "TikTok", icon: <TikTokIcon size={14} /> },
+                  {
+                    href: "https://www.instagram.com/itsallgreektome_tours/",
+                    label: "Instagram",
+                    icon: <InstagramIcon size={14} />,
+                  },
+                  {
+                    href: "https://www.tripadvisor.com.gr/Attraction_Review-g189400-d32977828-Reviews-It_s_all_Greek_To_Me_Tours_by_Xike_Travel-Athens_Attica.html",
+                    label: "TripAdvisor",
+                    icon: <TripAdvisorIcon size={14} />,
+                  },
+                  {
+                    href: "https://www.tiktok.com/@its.allgreek2me",
+                    label: "TikTok",
+                    icon: <TikTokIcon size={14} />,
+                  },
                 ].map(({ href, label, icon }) => (
                   <a
                     key={label}
@@ -187,8 +194,10 @@ export default function ContactContent() {
             {/* Viator badge */}
             <div className="p-4 bg-[#0c3060] border border-[#1a4a7a] rounded-xl">
               <p className="text-xs text-[#7aabca] leading-relaxed">
-                <span className="text-[#7bc5ea] font-medium">Verified on Viator</span>
-                {" "}— Read reviews and book tours directly through our Viator
+                <span className="text-[#7bc5ea] font-medium">
+                  Verified on Viator
+                </span>{" "}
+                — Read reviews and book tours directly through our Viator
                 profile.
               </p>
               <a
@@ -209,7 +218,10 @@ export default function ContactContent() {
                 <div className="mb-5 px-5 py-4 bg-red-900/20 border border-red-500/30 rounded-xl">
                   <p className="text-sm text-red-300 text-center">
                     Something went wrong. Please try again or email us at{" "}
-                    <a href="mailto:hello@itsallgreek2me.tours" className="underline">
+                    <a
+                      href="mailto:hello@itsallgreek2me.tours"
+                      className="underline"
+                    >
                       hello@itsallgreek2me.tours
                     </a>
                     .
@@ -231,7 +243,13 @@ export default function ContactContent() {
                   <button
                     onClick={() => {
                       setFormState("idle");
-                      setForm({ name: "", email: "", phone: "", subject: "", message: "" });
+                      setForm({
+                        name: "",
+                        email: "",
+                        phone: "",
+                        subject: "",
+                        message: "",
+                      });
                     }}
                     className="mt-8 px-6 py-2.5 text-sm text-[#7bc5ea] border border-[#7bc5ea]/30 rounded hover:bg-[#7bc5ea]/10 transition-colors"
                   >
@@ -244,7 +262,13 @@ export default function ContactContent() {
                     Send us a message
                   </h3>
 
-                  <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="transfer-form space-y-5">
+                  <form
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      handleSubmit();
+                    }}
+                    className="transfer-form space-y-5"
+                  >
                     {/* Name + Email */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>
@@ -314,7 +338,11 @@ export default function ContactContent() {
                               "Partnership",
                               "General Question",
                             ].map((s) => (
-                              <option key={s} value={s} className="bg-[#0d3a6a]">
+                              <option
+                                key={s}
+                                value={s}
+                                className="bg-[#0d3a6a]"
+                              >
                                 {s}
                               </option>
                             ))}
@@ -351,7 +379,7 @@ export default function ContactContent() {
                           "flex items-center gap-2 px-8 py-3.5 rounded text-sm font-semibold tracking-wide transition-all duration-200",
                           formState === "loading"
                             ? "bg-[#5aacda] text-[#071e38] cursor-wait"
-                            : "bg-[#7bc5ea] text-[#071e38] hover:bg-white"
+                            : "bg-[#7bc5ea] text-[#071e38] hover:bg-white",
                         )}
                       >
                         {formState === "loading" ? (

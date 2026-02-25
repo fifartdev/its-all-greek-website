@@ -10,7 +10,9 @@ import BokunModal from "./BokunModal";
 
 export default function Footer() {
   const year = new Date().getFullYear();
-  const [modal, setModal] = useState<{ url: string; title: string } | null>(null);
+  const [modal, setModal] = useState<{ url: string; title: string } | null>(
+    null,
+  );
 
   return (
     <footer className="relative bg-[#061525] border-t border-[#133d6b]">
@@ -42,24 +44,26 @@ export default function Footer() {
             <div className="space-y-2.5">
               <div className="flex items-center gap-2.5">
                 <MapPin size={13} className="text-[#7bc5ea] shrink-0" />
-                <span className="text-xs text-[#7aabca]">Athens, Greece</span>
+                <span className="text-xs text-[#7aabca]">
+                  27, Zinonos str., Chalandri-Athens, Greece
+                </span>
               </div>
               <a
-                href="tel:+302101234567"
+                href="tel:+302103636000"
                 className="flex items-center gap-2.5 hover:text-[#7bc5ea] transition-colors group"
               >
                 <Phone size={13} className="text-[#7bc5ea] shrink-0" />
                 <span className="text-xs text-[#7aabca] group-hover:text-[#7bc5ea]">
-                  +30 210 123 4567
+                  +30 210 36 36 000
                 </span>
               </a>
               <a
-                href="mailto:hello@itsallgreek2me.tours"
+                href="mailto:info@itsallgreek2me.tours"
                 className="flex items-center gap-2.5 hover:text-[#7bc5ea] transition-colors group"
               >
                 <Mail size={13} className="text-[#7bc5ea] shrink-0" />
                 <span className="text-xs text-[#7aabca] group-hover:text-[#7bc5ea]">
-                  hello@itsallgreek2me.tours
+                  info@itsallgreek2me.tours
                 </span>
               </a>
             </div>
@@ -105,7 +109,9 @@ export default function Footer() {
               {tours.map((tour) => (
                 <li key={tour.id}>
                   <button
-                    onClick={() => setModal({ url: tour.bokunUrl, title: tour.title })}
+                    onClick={() =>
+                      setModal({ url: tour.bokunUrl, title: tour.title })
+                    }
                     className="text-sm text-[#7aabca] hover:text-[#eaf4fb] transition-colors gold-underline text-left"
                   >
                     {tour.shortTitle}
@@ -127,7 +133,11 @@ export default function Footer() {
                 { label: "Transfers", href: "#transfers" },
                 { label: "About", href: "#about" },
                 { label: "Contact", href: "/contact" },
-                { label: "Viator Reviews", href: "https://www.viator.com", external: true },
+                {
+                  label: "Viator Reviews",
+                  href: "https://www.viator.com",
+                  external: true,
+                },
               ].map((link) => (
                 <li key={link.label}>
                   {link.external ? (
@@ -157,11 +167,13 @@ export default function Footer() {
         <div className="flex flex-col gap-3 pt-8 border-t border-[#133d6b]">
           {/* Registration info */}
           <p className="text-[10px] text-[#4a7896] text-center leading-relaxed tracking-wide">
-            GNTO REG. No 0206E60000614201&nbsp;&nbsp;|&nbsp;&nbsp;Officially Registered Company with No 143755201000
+            GNTO REG. No 0206E60000614201&nbsp;&nbsp;|&nbsp;&nbsp;Officially
+            Registered Company with No 143755201000
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2">
             <p className="text-xs text-[#4a7896]">
-              © {year} It&apos;s All Greek To Me — by XIKE Travel. All rights reserved.
+              © {year} It&apos;s All Greek To Me — by XIKE Travel. All rights
+              reserved.
             </p>
             <p className="text-xs text-[#4a7896]">
               Powered by{" "}
@@ -172,8 +184,8 @@ export default function Footer() {
                 className="text-[#7bc5ea]/50 hover:text-[#7bc5ea] transition-colors"
               >
                 Bokun
-              </a>
-              {" "}·{" "}
+              </a>{" "}
+              ·{" "}
               <a
                 href="https://www.viator.com"
                 target="_blank"
