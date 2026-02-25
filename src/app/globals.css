@@ -1,26 +1,153 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,700&family=Inter:wght@300;400;500;600&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg-primary: #071e38;
+  --bg-surface: #0c3060;
+  --bg-card: #0d3a6a;
+  --gold: #7bc5ea;
+  --gold-light: #ffffff;
+  --gold-muted: #5aacda;
+  --cream: #eaf4fb;
+  --cream-muted: #a0c4dc;
+  --border: #1a4a7a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-sans: "Inter", system-ui, sans-serif;
+  --color-gold: #7bc5ea;
+  --color-gold-light: #ffffff;
+  --color-gold-muted: #5aacda;
+  --color-cream: #eaf4fb;
+  --color-cream-muted: #a0c4dc;
+  --color-bg-primary: #071e38;
+  --color-bg-surface: #0c3060;
+  --color-bg-card: #0d3a6a;
+  --color-border-dark: #1a4a7a;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--cream);
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--gold-muted);
+  border-radius: 3px;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(123, 197, 234, 0.3);
+  color: var(--cream);
+}
+
+/* Tour card hover overlay animation */
+.tour-card-overlay {
+  transition: opacity 0.5s ease;
+}
+
+.tour-card:hover .tour-card-overlay {
+  opacity: 1 !important;
+}
+
+.tour-card img {
+  transition: transform 0.7s ease;
+}
+
+.tour-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Accent underline animation */
+.gold-underline {
+  position: relative;
+}
+.gold-underline::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--gold);
+  transition: width 0.3s ease;
+}
+.gold-underline:hover::after {
+  width: 100%;
+}
+
+/* Fade-in animation */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.animate-delay-100 { animation-delay: 0.1s; opacity: 0; }
+.animate-delay-200 { animation-delay: 0.2s; opacity: 0; }
+.animate-delay-300 { animation-delay: 0.3s; opacity: 0; }
+.animate-delay-400 { animation-delay: 0.4s; opacity: 0; }
+
+/* Form custom styling */
+.transfer-form input,
+.transfer-form select,
+.transfer-form textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(123, 197, 234, 0.2);
+  color: var(--cream);
+  border-radius: 4px;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.transfer-form input:focus,
+.transfer-form select:focus,
+.transfer-form textarea:focus {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--gold);
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(123, 197, 234, 0.1);
+}
+
+.transfer-form select option {
+  background: #0d3a6a;
+  color: var(--cream);
+}
+
+/* Marquee animation */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+.animate-marquee {
+  animation: marquee 30s linear infinite;
 }
