@@ -5,13 +5,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { tours } from "@/data/tours";
+import BokunModal from "./BokunModal";
 import clsx from "clsx";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toursDropdownOpen, setToursDropdownOpen] = useState(false);
+  const [modal, setModal] = useState<{ url: string; title: string } | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const openBooking = (url: string, title: string) => {
+    setToursDropdownOpen(false);
+    setMobileOpen(false);
+    setModal({ url, title });
+  };
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 60);
@@ -72,6 +80,14 @@ export default function Navbar() {
 
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-8">
+            {/* Home */}
+            <Link
+              href="/"
+              className="text-sm font-medium tracking-wide text-[#a0c4dc] hover:text-[#eaf4fb] transition-colors duration-200"
+            >
+              Home
+            </Link>
+
             {/* Tours dropdown — "no-go" link */}
             <div className="relative" ref={dropdownRef}>
               <button
@@ -111,13 +127,10 @@ export default function Navbar() {
                   </p>
                 </div>
                 {tours.map((tour) => (
-                  <a
+                  <button
                     key={tour.id}
-                    href={tour.bokunUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setToursDropdownOpen(false)}
-                    className="flex items-start gap-3 px-4 py-3.5 hover:bg-[#0d3a6a] transition-colors duration-150 group border-b border-[#133d6b] last:border-0"
+                    onClick={() => openBooking(tour.bokunUrl, tour.title)}
+                    className="flex items-start gap-3 px-4 py-3.5 hover:bg-[#0d3a6a] transition-colors duration-150 group border-b border-[#133d6b] last:border-0 w-full text-left"
                   >
                     <span className="w-1 h-1 rounded-full mt-2 shrink-0 bg-[#7bc5ea] opacity-50 group-hover:opacity-100 transition-opacity" />
                     <div>
@@ -128,7 +141,7 @@ export default function Navbar() {
                         {tour.duration} · {tour.category}
                       </p>
                     </div>
-                  </a>
+                  </button>
                 ))}
                 <div className="px-4 py-3 bg-[#061525]">
                   <p className="text-[10px] text-[#7aabca] text-center">
@@ -171,6 +184,15 @@ export default function Navbar() {
         </div>
       </div>
 
+      {/* Bokun booking popup */}
+      {modal && (
+        <BokunModal
+          url={modal.url}
+          title={modal.title}
+          onClose={() => setModal(null)}
+        />
+      )}
+
       {/* Mobile menu */}
       <div
         className={clsx(
@@ -200,17 +222,14 @@ export default function Navbar() {
             >
               <div className="pl-4 pb-2 space-y-1">
                 {tours.map((tour) => (
-                  <a
+                  <button
                     key={tour.id}
-                    href={tour.bokunUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setMobileOpen(false)}
-                    className="flex items-center gap-2 py-2.5 text-sm text-[#7aabca] hover:text-[#7bc5ea]"
+                    onClick={() => openBooking(tour.bokunUrl, tour.title)}
+                    className="flex items-center gap-2 py-2.5 text-sm text-[#7aabca] hover:text-[#7bc5ea] w-full text-left"
                   >
                     <span className="w-1 h-1 rounded-full bg-[#7bc5ea] opacity-50" />
                     {tour.shortTitle}
-                  </a>
+                  </button>
                 ))}
               </div>
             </div>

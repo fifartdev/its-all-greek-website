@@ -1,11 +1,16 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { tours } from "@/data/tours";
-import { MapPin, Phone, Mail, Instagram } from "lucide-react";
-import { TikTokIcon, TripAdvisorIcon } from "./SocialIcons";
+import { MapPin, Phone, Mail } from "lucide-react";
+import { InstagramIcon, TikTokIcon, TripAdvisorIcon } from "./SocialIcons";
+import BokunModal from "./BokunModal";
 
 export default function Footer() {
   const year = new Date().getFullYear();
+  const [modal, setModal] = useState<{ url: string; title: string } | null>(null);
 
   return (
     <footer className="relative bg-[#061525] border-t border-[#133d6b]">
@@ -68,7 +73,7 @@ export default function Footer() {
                 aria-label="Instagram"
                 className="w-8 h-8 rounded border border-[#1a4a7a] flex items-center justify-center text-[#7aabca] hover:border-[#7bc5ea] hover:text-[#7bc5ea] transition-colors"
               >
-                <Instagram size={14} />
+                <InstagramIcon size={14} />
               </a>
               <a
                 href="https://www.tripadvisor.com.gr/Attraction_Review-g189400-d32977828-Reviews-It_s_all_Greek_To_Me_Tours_by_Xike_Travel-Athens_Attica.html"
@@ -99,14 +104,12 @@ export default function Footer() {
             <ul className="space-y-3">
               {tours.map((tour) => (
                 <li key={tour.id}>
-                  <a
-                    href={tour.bokunUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-sm text-[#7aabca] hover:text-[#eaf4fb] transition-colors gold-underline"
+                  <button
+                    onClick={() => setModal({ url: tour.bokunUrl, title: tour.title })}
+                    className="text-sm text-[#7aabca] hover:text-[#eaf4fb] transition-colors gold-underline text-left"
                   >
                     {tour.shortTitle}
-                  </a>
+                  </button>
                 </li>
               ))}
             </ul>
@@ -183,6 +186,15 @@ export default function Footer() {
           </div>
         </div>
       </div>
+
+      {/* Bokun booking popup */}
+      {modal && (
+        <BokunModal
+          url={modal.url}
+          title={modal.title}
+          onClose={() => setModal(null)}
+        />
+      )}
     </footer>
   );
 }

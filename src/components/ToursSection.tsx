@@ -1,27 +1,33 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { Clock, ArrowUpRight } from "lucide-react";
 import { tours, type Tour } from "@/data/tours";
+import BokunModal from "./BokunModal";
 import clsx from "clsx";
 
 function TourCard({
   tour,
+  onBook,
   className,
 }: {
   tour: Tour;
+  onBook: () => void;
   className?: string;
 }) {
   return (
-    <a
-      href={tour.bokunUrl}
-      target="_blank"
-      rel="noopener noreferrer"
+    <div
       className={clsx(
         "tour-card group relative overflow-hidden rounded-xl block",
         "bg-[#0c3060] cursor-pointer",
-        className
+        className,
       )}
+      onClick={onBook}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => e.key === "Enter" && onBook()}
+      aria-label={`Book ${tour.shortTitle}`}
     >
       {/* Image */}
       <div className="relative overflow-hidden h-full">
@@ -84,15 +90,23 @@ function TourCard({
           </span>
         </div>
       </div>
-    </a>
+    </div>
   );
 }
 
 export default function ToursSection() {
   const [acropolis, freeWalk, nightTour, sounion] = tours;
+  const [modal, setModal] = useState<{ url: string; title: string } | null>(null);
+
+  const openModal = (tour: Tour) => {
+    setModal({ url: tour.bokunUrl, title: tour.title });
+  };
 
   return (
-    <section id="tours" className="py-24 md:py-32 px-6 lg:px-10 max-w-7xl mx-auto">
+    <section
+      id="tours"
+      className="py-24 md:py-32 px-6 lg:px-10 max-w-7xl mx-auto"
+    >
       {/* Section header */}
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-14">
         <div>
@@ -117,20 +131,20 @@ export default function ToursSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Acropolis — large, spans 2 cols */}
         <div className="md:col-span-2 h-[480px] md:h-[560px]">
-          <TourCard tour={acropolis} className="h-full" />
+          <TourCard tour={acropolis} onBook={() => openModal(acropolis)} className="h-full" />
         </div>
 
         {/* Night Tour — tall, spans 2 rows on right */}
         <div className="h-[340px] md:row-span-2 md:h-full">
-          <TourCard tour={nightTour} className="h-full" />
+          <TourCard tour={nightTour} onBook={() => openModal(nightTour)} className="h-full" />
         </div>
 
         {/* Sounion + Free Walk — bottom row */}
         <div className="h-[340px]">
-          <TourCard tour={sounion} className="h-full" />
+          <TourCard tour={sounion} onBook={() => openModal(sounion)} className="h-full" />
         </div>
         <div className="h-[340px]">
-          <TourCard tour={freeWalk} className="h-full" />
+          <TourCard tour={freeWalk} onBook={() => openModal(freeWalk)} className="h-full" />
         </div>
       </div>
 
@@ -142,6 +156,15 @@ export default function ToursSection() {
           instant confirmation.
         </p>
       </div>
+
+      {/* Bokun booking popup */}
+      {modal && (
+        <BokunModal
+          url={modal.url}
+          title={modal.title}
+          onClose={() => setModal(null)}
+        />
+      )}
     </section>
   );
 }

@@ -1,17 +1,16 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import {
   MapPin,
   Phone,
   Mail,
   Clock,
-  Instagram,
   Send,
   CheckCircle,
 } from "lucide-react";
-import { TikTokIcon, TripAdvisorIcon } from "./SocialIcons";
+import { InstagramIcon, TikTokIcon, TripAdvisorIcon } from "./SocialIcons";
 import clsx from "clsx";
 
 type FormState = "idle" | "loading" | "success" | "error";
@@ -34,8 +33,7 @@ export default function ContactContent() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setFormState("loading");
     try {
       const res = await fetch("/api/contact", {
@@ -167,7 +165,7 @@ export default function ContactContent() {
               </p>
               <div className="flex gap-3 flex-wrap">
                 {[
-                  { href: "https://www.instagram.com/itsallgreektome_tours/", label: "Instagram", icon: <Instagram size={14} /> },
+                  { href: "https://www.instagram.com/itsallgreektome_tours/", label: "Instagram", icon: <InstagramIcon size={14} /> },
                   { href: "https://www.tripadvisor.com.gr/Attraction_Review-g189400-d32977828-Reviews-It_s_all_Greek_To_Me_Tours_by_Xike_Travel-Athens_Attica.html", label: "TripAdvisor", icon: <TripAdvisorIcon size={14} /> },
                   { href: "https://www.tiktok.com/@its.allgreek2me", label: "TikTok", icon: <TikTokIcon size={14} /> },
                 ].map(({ href, label, icon }) => (
@@ -246,7 +244,7 @@ export default function ContactContent() {
                     Send us a message
                   </h3>
 
-                  <form onSubmit={handleSubmit} className="transfer-form space-y-5">
+                  <form onSubmit={(e) => { e.preventDefault(); handleSubmit(); }} className="transfer-form space-y-5">
                     {/* Name + Email */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                       <div>

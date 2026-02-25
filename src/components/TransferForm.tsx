@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, type FormEvent } from "react";
+import { useState } from "react";
 import {
   Calendar,
   Clock,
@@ -35,8 +35,7 @@ export default function TransferForm() {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setFormState("loading");
     try {
       const res = await fetch("/api/transfer", {
@@ -126,7 +125,7 @@ export default function TransferForm() {
             </div>
           ) : (
             <form
-              onSubmit={handleSubmit}
+              onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}
               className="transfer-form bg-[#0c3060] rounded-2xl border border-[#1a4a7a] p-8 md:p-10"
             >
               {/* Row 1: Date + Time */}
