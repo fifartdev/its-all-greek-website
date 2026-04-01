@@ -1,12 +1,39 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { checkRateLimit } from "@/lib/rate-limit";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   try {
+    // Rate limiting by IP
+    const ip =
+      request.headers.get("x-forwarded-for")?.split(",")[0].trim() ??
+      request.headers.get("x-real-ip") ??
+      "unknown";
+    const { allowed, retryAfterMs } = checkRateLimit(`contact:${ip}`);
+    if (!allowed) {
+      return NextResponse.json(
+        { error: "Too many requests. Please try again later." },
+        {
+          status: 429,
+          headers: { "Retry-After": String(Math.ceil(retryAfterMs / 1000)) },
+        }
+      );
+    }
+
     const body = await request.json();
-    const { name, email, phone, subject, message } = body;
+    const { name, email, phone, subject, message, _hp, _t } = body;
+
+    // Honeypot check — bots fill hidden fields, humans don't
+    if (_hp) {
+      return NextResponse.json({ success: true }); // silently discard
+    }
+
+    // Timing check — reject submissions faster than 3 seconds
+    if (typeof _t === "number" && Date.now() - _t < 3000) {
+      return NextResponse.json({ success: true }); // silently discard
+    }
 
     if (!name || !email || !subject || !message) {
       return NextResponse.json(

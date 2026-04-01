@@ -19,6 +19,7 @@ type FormState = "idle" | "loading" | "success" | "error";
 
 export default function TransferForm() {
   const [formState, setFormState] = useState<FormState>("idle");
+  const [loadTime] = useState(() => Date.now());
   const [form, setForm] = useState({
     date: "",
     time: "",
@@ -27,6 +28,7 @@ export default function TransferForm() {
     passengers: "",
     luggages: "",
     message: "",
+    _hp: "",
   });
 
   const handleChange = (
@@ -41,7 +43,7 @@ export default function TransferForm() {
       const res = await fetch("/api/transfer", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, _t: loadTime }),
       });
       if (!res.ok) throw new Error("Request failed");
       setFormState("success");
@@ -116,7 +118,7 @@ export default function TransferForm() {
               <button
                 onClick={() => {
                   setFormState("idle");
-                  setForm({ date: "", time: "", from: "", to: "", passengers: "", luggages: "", message: "" });
+                  setForm({ date: "", time: "", from: "", to: "", passengers: "", luggages: "", message: "", _hp: "" });
                 }}
                 className="mt-8 px-6 py-2.5 text-sm text-[#7bc5ea] border border-[#7bc5ea]/30 rounded hover:bg-[#7bc5ea]/10 transition-colors"
               >
@@ -128,6 +130,18 @@ export default function TransferForm() {
               onSubmit={(e) => { e.preventDefault(); handleSubmit(); }}
               className="transfer-form bg-[#0c3060] rounded-2xl border border-[#1a4a7a] p-8 md:p-10"
             >
+              {/* Honeypot — hidden from real users, bots fill it */}
+              <div aria-hidden="true" style={{ display: "none" }}>
+                <input
+                  type="text"
+                  name="_hp"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form._hp}
+                  onChange={handleChange}
+                />
+              </div>
+
               {/* Row 1: Date + Time */}
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
                 <div>
