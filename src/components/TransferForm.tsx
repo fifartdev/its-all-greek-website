@@ -11,6 +11,9 @@ import {
   Send,
   CheckCircle,
   ArrowRight,
+  User,
+  Mail,
+  Phone,
 } from "lucide-react";
 import { transferLocations } from "@/data/tours";
 import clsx from "clsx";
@@ -21,6 +24,9 @@ export default function TransferForm() {
   const [formState, setFormState] = useState<FormState>("idle");
   const [loadTime] = useState(() => Date.now());
   const [form, setForm] = useState({
+    fullname: "",
+    email: "",
+    phone: "",
     date: "",
     time: "",
     from: "",
@@ -118,7 +124,7 @@ export default function TransferForm() {
               <button
                 onClick={() => {
                   setFormState("idle");
-                  setForm({ date: "", time: "", from: "", to: "", passengers: "", luggages: "", message: "", _hp: "" });
+                  setForm({ fullname: "", email: "", phone: "", date: "", time: "", from: "", to: "", passengers: "", luggages: "", message: "", _hp: "" });
                 }}
                 className="mt-8 px-6 py-2.5 text-sm text-[#7bc5ea] border border-[#7bc5ea]/30 rounded hover:bg-[#7bc5ea]/10 transition-colors"
               >
@@ -140,6 +146,55 @@ export default function TransferForm() {
                   value={form._hp}
                   onChange={handleChange}
                 />
+              </div>
+
+              {/* Row 0: Full Name + Email + Phone */}
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-5">
+                <div>
+                  <label className="block text-xs tracking-[0.15em] uppercase text-[#7aabca] mb-2">
+                    <User size={11} className="inline mr-1.5 mb-0.5" />
+                    Full Name *
+                  </label>
+                  <input
+                    type="text"
+                    name="fullname"
+                    required
+                    placeholder="Your full name"
+                    value={form.fullname}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 text-sm text-[#eaf4fb] placeholder-[#4a7896] rounded bg-white/5 border border-gold/20 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold/20 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs tracking-[0.15em] uppercase text-[#7aabca] mb-2">
+                    <Mail size={11} className="inline mr-1.5 mb-0.5" />
+                    Email *
+                  </label>
+                  <input
+                    type="email"
+                    name="email"
+                    required
+                    placeholder="your@email.com"
+                    value={form.email}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 text-sm text-[#eaf4fb] placeholder-[#4a7896] rounded bg-white/5 border border-gold/20 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold/20 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs tracking-[0.15em] uppercase text-[#7aabca] mb-2">
+                    <Phone size={11} className="inline mr-1.5 mb-0.5" />
+                    Phone *
+                  </label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    required
+                    placeholder="+1 (555) 000-0000"
+                    value={form.phone}
+                    onChange={handleChange}
+                    className="w-full px-4 py-3 text-sm text-[#eaf4fb] placeholder-[#4a7896] rounded bg-white/5 border border-gold/20 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold/20 transition-colors"
+                  />
+                </div>
               </div>
 
               {/* Row 1: Date + Time */}

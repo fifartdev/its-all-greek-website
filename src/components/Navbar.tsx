@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import Image from "next/image";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { tours } from "@/data/tours";
@@ -9,6 +10,8 @@ import BokunModal from "./BokunModal";
 import clsx from "clsx";
 
 export default function Navbar() {
+  const pathname = usePathname();
+  const anchor = (hash: string) => (pathname === "/" ? hash : `/${hash}`);
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [toursDropdownOpen, setToursDropdownOpen] = useState(false);
@@ -46,8 +49,8 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { label: "Transfers", href: "#transfers" },
-    { label: "About", href: "#about" },
+    { label: "Transfers", href: anchor("#transfers") },
+    { label: "About", href: anchor("#about") },
     { label: "Contact", href: "/contact" },
   ];
 
@@ -161,8 +164,8 @@ export default function Navbar() {
               </Link>
             ))}
 
-            <a
-              href="#transfers"
+            <Link
+              href={anchor("#transfers")}
               className={clsx(
                 "px-5 py-2 text-sm font-semibold tracking-wide rounded",
                 "bg-[#7bc5ea] text-[#071e38]",
@@ -170,7 +173,7 @@ export default function Navbar() {
               )}
             >
               Book Transfer
-            </a>
+            </Link>
           </nav>
 
           {/* Mobile hamburger */}
@@ -247,13 +250,13 @@ export default function Navbar() {
           ))}
 
           <div className="pt-4">
-            <a
-              href="#transfers"
+            <Link
+              href={anchor("#transfers")}
               onClick={() => setMobileOpen(false)}
               className="block w-full text-center px-5 py-3 text-sm font-semibold bg-[#7bc5ea] text-[#071e38] rounded hover:bg-white transition-colors"
             >
               Book a Transfer
-            </a>
+            </Link>
           </div>
         </div>
       </div>

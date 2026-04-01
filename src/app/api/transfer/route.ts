@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { date, time, from, to, passengers, luggages, message, _hp, _t } = body;
+    const { fullname, email, phone, date, time, from, to, passengers, luggages, message, _hp, _t } = body;
 
     // Honeypot check — bots fill hidden fields, humans don't
     if (_hp) {
@@ -35,11 +35,17 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ success: true }); // silently discard
     }
 
-    if (!date || !time || !from || !to || !passengers || luggages === undefined) {
+    if (!fullname || !email || !phone || !date || !time || !from || !to || !passengers || luggages === undefined) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
+    }
+
+    // Basic email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json({ error: "Invalid email address" }, { status: 400 });
     }
 
     const formattedDate = new Date(date).toLocaleDateString("en-GB", {
@@ -88,6 +94,34 @@ export async function POST(request: NextRequest) {
             </td>
           </tr>
 
+          <!-- Customer details -->
+          <tr>
+            <td style="padding:24px 40px 0;">
+              <table width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="padding-bottom:16px;border-bottom:1px solid #1a4a7a;width:50%;vertical-align:top;padding-right:16px;">
+                    <p style="margin:0 0 2px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#7aabca;">Name</p>
+                    <p style="margin:0;font-size:15px;font-weight:600;color:#eaf4fb;">${fullname}</p>
+                  </td>
+                  <td style="padding-bottom:16px;border-bottom:1px solid #1a4a7a;vertical-align:top;padding-left:16px;">
+                    <p style="margin:0 0 2px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#7aabca;">Email</p>
+                    <p style="margin:0;font-size:15px;font-weight:600;color:#eaf4fb;">
+                      <a href="mailto:${email}" style="color:#7bc5ea;text-decoration:none;">${email}</a>
+                    </p>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2" style="padding:16px 0;border-bottom:1px solid #1a4a7a;">
+                    <p style="margin:0 0 2px;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:#7aabca;">Phone</p>
+                    <p style="margin:0;font-size:15px;font-weight:600;color:#eaf4fb;">
+                      <a href="tel:${phone}" style="color:#7bc5ea;text-decoration:none;">${phone}</a>
+                    </p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
           <!-- Details grid -->
           <tr>
             <td style="padding:28px 40px;">
@@ -130,7 +164,7 @@ export async function POST(request: NextRequest) {
           <tr>
             <td style="padding:0 40px 32px;">
               <p style="margin:0 0 16px;font-size:13px;color:#7aabca;">Please respond to this request as soon as possible. The customer expects a reply within 1 hour.</p>
-              <a href="mailto:${process.env.RESEND_CONTACT_TO}" style="display:inline-block;padding:12px 28px;background:#7bc5ea;color:#071e38;font-size:13px;font-weight:700;border-radius:6px;text-decoration:none;letter-spacing:0.05em;">Reply to Customer</a>
+              <a href="mailto:${email}?subject=Re: Transfer Request — ${encodeURIComponent(formattedDate)}" style="display:inline-block;padding:12px 28px;background:#7bc5ea;color:#071e38;font-size:13px;font-weight:700;border-radius:6px;text-decoration:none;letter-spacing:0.05em;">Reply to ${fullname}</a>
             </td>
           </tr>
 
@@ -153,7 +187,8 @@ export async function POST(request: NextRequest) {
     const { error } = await resend.emails.send({
       from: process.env.RESEND_FROM_EMAIL!,
       to: [process.env.RESEND_TRANSFER_TO!],
-      subject: `🚘 Transfer Request — ${formattedDate} · ${from} → ${to}`,
+      replyTo: email,
+      subject: `🚘 Transfer Request — ${formattedDate} · ${from} → ${to} (${fullname})`,
       html,
     });
 
