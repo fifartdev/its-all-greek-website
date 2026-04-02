@@ -176,6 +176,20 @@ export default function Footer() {
               reserved.
             </p>
             <p className="text-xs text-[#4a7896]">
+              <Link
+                href="/privacy"
+                className="text-[#7bc5ea]/50 hover:text-[#7bc5ea] transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              {" "}·{" "}
+              <Link
+                href="/terms"
+                className="text-[#7bc5ea]/50 hover:text-[#7bc5ea] transition-colors"
+              >
+                Terms of Use
+              </Link>
+              {" "}·{" "}
               Powered by{" "}
               <a
                 href="https://bokun.io"
